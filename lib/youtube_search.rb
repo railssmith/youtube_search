@@ -9,7 +9,7 @@ module YoutubeSearch
     def search_page(page, query, options={})
       options = options_with_per_page_and_page(options)
       query = options.merge(:q => query).map{|k,v| "#{CGI.escape k.to_s}=#{CGI.escape v.to_s}" }.join('&')
-      xml = open("#{page}?#{query}").read
+      xml = URI.open("#{page}?#{query}").read
       parse(xml)
     end
 
@@ -63,7 +63,7 @@ module YoutubeSearch
 
     def videos(url, format, options = {})
       url += '&alt=json' if format == :json
-      res = open(url).read
+      res = URI.open(url).read
       if format == :json
         res
       else
